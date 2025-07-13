@@ -1,5 +1,6 @@
 import { Text, View, StyleSheet, Dimensions, Image, Button, Alert } from "react-native";
 import { Link } from 'expo-router';
+import { ImageBackground } from "expo-image";
 
 
 const Spacer = ({ size = 20 }) => <View style={{ height: size }} />;
@@ -8,17 +9,18 @@ const Spacer = ({ size = 20 }) => <View style={{ height: size }} />;
 export default function Index() {
     return (
         <View style={styles.Container}>
+            <ImageBackground source={'../assets/images/zoop-logo.png'}>
+                <Image style={{
+                    width: 0.25 * (Dimensions.get('window').width),
+                    height: 0.127 * (Dimensions.get('window').width),
+                }} source={require('../assets/images/zoop-thin.png')} />
+                <Text style={styles.GlowText}>anonymous random chat</Text>
 
-            <Image style={{
-                width: 0.25 * (Dimensions.get('window').width),
-                height: 0.127 * (Dimensions.get('window').width),
-            }} source={require('../assets/images/zoop-thin.png')} />
-            <Text style={styles.GlowText}>anonymous random chat</Text>
+                <Spacer size={40} />
 
-            <Spacer size={40} />
-
-            <Button title="Press Me" style={styles.Button} onPress={() => Alert.alert("Nigga")} />
-        </View>
+                <Button title="Press Me" color={"#C0C0C0"} onPress={() => Alert.alert("Nigga")} />
+            </ImageBackground>
+        </View >
     );
 }
 
@@ -30,10 +32,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
 
-    Button: {
-        color: 'white',
-        backgroundColor: "#C0C0C0"
-    },
     GlowText: {
         fontSize: 32,
         color: '#C0C0C0', // Silver color
