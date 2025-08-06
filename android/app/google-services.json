@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "213881238863",
+    "project_id": "zoop-5bd80",
+    "storage_bucket": "zoop-5bd80.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213881238863:android:31ecdbbde9f3cb41d1013a",
+        "android_client_info": {
+          "package_name": "com.sherucon.zoop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXOIquSPskMpY7r12X92PAmu3YSDFhrLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
