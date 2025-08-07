@@ -1,6 +1,13 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
+  ext {
+        buildToolsVersion = "a.b.c"
+        minSdkVersion = x
+        compileSdkVersion = y
+        targetSdkVersion = z
+        googlePlayServicesAuthVersion = "20.7.0" // <--- use this version or newer
+    }
   repositories {
     google()
     mavenCentral()
