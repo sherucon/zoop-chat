@@ -1,11 +1,11 @@
-import React from "react";
-import { View, StyleSheet, Dimensions, Image, Modal, } from "react-native";
+import TermsAndConditions from "@/assets/TnC";
+import { Redirect } from "expo-router";
+import React, { useState } from "react";
+import { Dimensions, Image, Modal, StyleSheet, View, } from "react-native";
+import { useAuth } from "./components/AuthContext";
+import GoogleSignIn from "./components/GoogleSignIn";
 import PressableButton from "./components/PressableButton";
 import TNCButton from "./components/TNCButton";
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import TermsAndConditions from "@/assets/TnC";
-import { useState } from "react";
-import GoogleSignIn from "./components/GoogleSignIn";
 
 
 const Spacer = ({ size = 20 }) => <View style={{ height: size }} />;
@@ -13,9 +13,17 @@ const Spacer = ({ size = 20 }) => <View style={{ height: size }} />;
 const logo = require('@/assets/images/zoop-trans-logo.png');
 
 
-export default function Index() {
-
+export default function SignIn() {
+    const { user, loading } = useAuth();
     let [TNCShown, setShowTNC] = useState<boolean>(false);
+
+    console.log('SignIn - Loading:', loading, 'User:', user ? user.email : 'No user');
+
+    // If user is authenticated, redirect to main app
+    if (!loading && user) {
+        console.log('SignIn - User authenticated, redirecting to main app');
+        return <Redirect href="/(tabs)" />;
+    }
 
     return (
         <View style={styles.Container}>
@@ -45,7 +53,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#2e2e2e',
         alignItems: 'center',
-        alignContent: 'center',
     },
     ModalContainer: {
         flex: 0,

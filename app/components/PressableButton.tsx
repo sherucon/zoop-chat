@@ -1,5 +1,4 @@
-import { View, Text, Pressable, StyleSheet, Dimensions } from 'react-native';
-import { Image } from 'expo-image';
+import { View, Text, Pressable, StyleSheet, } from 'react-native';
 import { ViewStyle } from 'react-native/Libraries/StyleSheet/StyleSheetTypes';
 
 type Props = {
@@ -26,12 +25,14 @@ export default function PressableButton({ label, onPress, icon, style }: Props) 
 const styles = StyleSheet.create({
     Container: {
         borderRadius: 10,
+        maxWidth: 400,
         backgroundColor: "#C0C0C0",
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
     },
     Pressable: {
+        width: '100%',
         paddingVertical: 15,
         borderRadius: 10,
         backgroundColor: "#C0C0C0",
