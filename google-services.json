@@ -1,54 +1,54 @@
 {
-    "project_info": {
-        "project_number": "213881238863",
-        "project_id": "zoop-5bd80",
-        "storage_bucket": "zoop-5bd80.firebasestorage.app"
-    },
-    "client": [
-        {
-            "client_info": {
-                "mobilesdk_app_id": "1:213881238863:android:31ecdbbde9f3cb41d1013a",
-                "android_client_info": {
-                    "package_name": "com.sherucon.zoop"
-                }
-            },
-            "oauth_client": [
-                {
-                    "client_id": "213881238863-bhjb919a5jv4u3vrdr6qp29pt42g43o9.apps.googleusercontent.com",
-                    "client_type": 1,
-                    "android_info": {
-                        "package_name": "com.sherucon.zoop",
-                        "certificate_hash": "28490233ff4b9f95190789fc0fe42eec1ef2ac2b"
-                    }
-                },
-                {
-                    "client_id": "213881238863-qc1k110d02g8p4kjg5arkibbl4saq4lt.apps.googleusercontent.com",
-                    "client_type": 3
-                }
-            ],
-            "api_key": [
-                {
-                    "current_key": "AIzaSyDXOIquSPskMpY7r12X92PAmu3YSDFhrLI"
-                }
-            ],
-            "services": {
-                "appinvite_service": {
-                    "other_platform_oauth_client": [
-                        {
-                            "client_id": "213881238863-qc1k110d02g8p4kjg5arkibbl4saq4lt.apps.googleusercontent.com",
-                            "client_type": 3
-                        },
-                        {
-                            "client_id": "213881238863-7e227p9o3i5el05iakk3i1q447c38ed5.apps.googleusercontent.com",
-                            "client_type": 2,
-                            "ios_info": {
-                                "bundle_id": "com.sherucon.zoop"
-                            }
-                        }
-                    ]
-                }
-            }
+  "project_info": {
+    "project_number": "213881238863",
+    "project_id": "zoop-5bd80",
+    "storage_bucket": "zoop-5bd80.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:213881238863:android:31ecdbbde9f3cb41d1013a",
+        "android_client_info": {
+          "package_name": "com.sherucon.zoop"
         }
-    ],
-    "configuration_version": "1"
+      },
+      "oauth_client": [
+        {
+          "client_id": "213881238863-960nj6410tmrd17k69bsustu674pi3ae.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.sherucon.zoop",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "213881238863-qc1k110d02g8p4kjg5arkibbl4saq4lt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXOIquSPskMpY7r12X92PAmu3YSDFhrLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "213881238863-qc1k110d02g8p4kjg5arkibbl4saq4lt.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "213881238863-7e227p9o3i5el05iakk3i1q447c38ed5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.sherucon.zoop"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
 }

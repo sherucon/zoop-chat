@@ -18,18 +18,14 @@ export default function TNCButton({ label, onPress, }: Props) {
 
 const styles = StyleSheet.create({
     Container: {
-        padding: 15,
-        borderRadius: 10,
+        padding: 5,
         backgroundColor: "#2e2e2e",
-        width: 0.9 * Dimensions.get('window').width,
         alignItems: 'center',
         justifyContent: 'center',
-        flexDirection: 'row',
     },
     Pressable: {
-        borderRadius: 10,
+        padding: 10,
         backgroundColor: "#2e2e2e",
-        width: 0.9 * Dimensions.get('window').width,
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',

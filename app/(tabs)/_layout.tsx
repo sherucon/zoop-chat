@@ -9,14 +9,17 @@ export default function TabsLayout() {
         <ProtectedRoute>
             <Tabs
                 screenOptions={{
-                    tabBarActiveTintColor: '#007AFF',
-                    headerShown: false,
+                    tabBarActiveTintColor: '#C0C0C0',
+                    headerShown: true,
+                    headerTitleStyle: { color: "#C0C0C0", },
+                    headerStyle: { backgroundColor: '#2E2E2E', },
+                    tabBarStyle: { backgroundColor: "#2E2E2E" }
                 }}
             >
                 <Tabs.Screen
                     name="index"
                     options={{
-                        title: 'Home',
+                        title: 'Chats',
                         tabBarIcon: ({ color, focused }) => (
                             <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
                         ),

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Text, ScrollView, StyleSheet } from 'react-native';
+import { Text, ScrollView, StyleSheet, View } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient'; // Use `expo` import
 
 const TermsAndConditions: React.FC = () => (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         <Text style={styles.heading}>Zoop Chat Terms and Conditions</Text>
         <Text style={styles.subheading}>Last Updated: August 2025</Text>
 
@@ -42,10 +43,16 @@ const TermsAndConditions: React.FC = () => (
         <Text style={styles.paragraphItalic}>By using Zoop Chat, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.</Text>
     </ScrollView>
 );
-
 const styles = StyleSheet.create({
+    wrapper: {
+        flex: 1,
+        position: 'relative',
+        backgroundColor: '#1a1a1a', // Match fade color
+    },
     container: {
         padding: 16,
+        paddingTop: 40,
+        paddingBottom: 40,
     },
     heading: {
         fontSize: 24,
@@ -78,5 +85,4 @@ const styles = StyleSheet.create({
         color: '#C0C0C0',
     },
 });
-
 export default TermsAndConditions;

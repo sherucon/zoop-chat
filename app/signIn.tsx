@@ -1,4 +1,4 @@
-import TermsAndConditions from "@/assets/TnC";
+import TermsAndConditions from "./components/TnC";
 import { Redirect } from "expo-router";
 import React, { useState } from "react";
 import { Dimensions, Image, Modal, StyleSheet, View, } from "react-native";
@@ -40,7 +40,9 @@ export default function SignIn() {
                 <Modal visible={TNCShown} transparent={true} animationType='slide'>
                     <View style={styles.ModalContainer}>
                         <TermsAndConditions />
-                        <PressableButton style={{ width: '40%' }} label='Close' onPress={() => setShowTNC(false)} />
+                        <View style={{ padding: 10, }}>
+                            <PressableButton style={{ width: '100%' }} label='Close' onPress={() => setShowTNC(false)} />
+                        </View>
                     </View>
                 </Modal>
             </View>

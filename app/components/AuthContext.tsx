@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
 import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
     user: FirebaseAuthTypes.User | null;
@@ -49,3 +49,4 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         </AuthContext.Provider>
     );
 };
+
