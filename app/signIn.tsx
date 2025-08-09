@@ -1,10 +1,11 @@
-import TermsAndConditions from "./components/TnC";
 import { Redirect } from "expo-router";
 import React, { useState } from "react";
 import { Dimensions, Image, Modal, StyleSheet, View, } from "react-native";
 import { useAuth } from "./components/AuthContext";
+// import DebugFirestore from "./components/DebugFirestore";
 import GoogleSignIn from "./components/GoogleSignIn";
 import PressableButton from "./components/PressableButton";
+import TermsAndConditions from "./components/TnC";
 import TNCButton from "./components/TNCButton";
 
 
@@ -17,13 +18,16 @@ export default function SignIn() {
     const { user, loading } = useAuth();
     let [TNCShown, setShowTNC] = useState<boolean>(false);
 
-    console.log('SignIn - Loading:', loading, 'User:', user ? user.email : 'No user');
+    console.log(' SignIn - Loading:', loading, 'User:', user ? user.email : 'No user');
+    console.log(' SignIn - Should redirect:', !loading && user ? 'YES' : 'NO');
 
     // If user is authenticated, redirect to main app
     if (!loading && user) {
-        console.log('SignIn - User authenticated, redirecting to main app');
+        console.log(' SignIn - User authenticated, redirecting to main app');
         return <Redirect href="/(tabs)" />;
     }
+
+    console.log(' SignIn - Showing login screen');
 
     return (
         <View style={styles.Container}>
@@ -46,6 +50,7 @@ export default function SignIn() {
                     </View>
                 </Modal>
             </View>
+            {/* <DebugFirestore /> */}
         </View>
     )
 }

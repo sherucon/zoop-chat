@@ -1,5 +1,5 @@
-import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
 import ProtectedRoute from '../components/ProtectedRoute';
 
 export default function TabsLayout() {
@@ -21,7 +21,7 @@ export default function TabsLayout() {
                     options={{
                         title: 'Chats',
                         tabBarIcon: ({ color, focused }) => (
-                            <Ionicons name={focused ? 'home' : 'home-outline'} size={24} color={color} />
+                            <Ionicons name={focused ? 'chatbubbles' : 'chatbubbles-outline'} size={24} color={color} />
                         ),
                     }}
                 />
@@ -30,7 +30,7 @@ export default function TabsLayout() {
                     options={{
                         title: 'Profile',
                         tabBarIcon: ({ color, focused }) => (
-                            <Ionicons name={focused ? 'person' : 'person-outline'} size={24} color={color} />
+                            <Ionicons name={focused ? 'person-circle' : 'person-circle-outline'} size={24} color={color} />
                         ),
                     }}
                 />

@@ -1,8 +1,9 @@
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { View } from "react-native";
-import PressableButton from "./PressableButton";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
-import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { GoogleAuthProvider, signInWithCredential, signOut } from 'firebase/auth';
+import { View } from "react-native";
+import { auth } from '../../firebase/firebaseConfig';
+import PressableButton from "./PressableButton";
 
 GoogleSignin.configure({
     webClientId: "213881238863-qc1k110d02g8p4kjg5arkibbl4saq4lt.apps.googleusercontent.com",
@@ -30,10 +31,10 @@ async function onGoogleButtonPress() {
         }
 
         // Create a Google credential with the idToken
-        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+        const googleCredential = GoogleAuthProvider.credential(idToken);
 
         // Sign-in the user with the credential
-        return auth().signInWithCredential(googleCredential);
+        return signInWithCredential(auth, googleCredential);
     } catch (error) {
         console.error('Google Sign-In Error:', error);
         throw error;
@@ -43,7 +44,7 @@ async function onGoogleButtonPress() {
 
 const clearAuth = async () => {
     try {
-        await auth().signOut();
+        await signOut(auth);
         await GoogleSignin.signOut();
         console.log('Successfully signed out');
     } catch (error) {
@@ -54,10 +55,11 @@ const clearAuth = async () => {
 export default function GoogleSignIn() {
     const handleGoogleSignIn = async () => {
         try {
-            await onGoogleButtonPress();
-            console.log('Signed in with Google!');
+            console.log('🔑 Starting Google Sign-In process...');
+            const result = await onGoogleButtonPress();
+            console.log(' Google Sign-In successful!', result?.user?.email);
         } catch (error) {
-            console.error('Sign-in failed:', error);
+            console.error('❌ Google Sign-In failed:', error);
         }
     };
 
