@@ -1,4 +1,4 @@
-import { updateUserAge, updateUserGender, updateUserLookingFor, updateUserUsername } from '../../firebase/updateUserProfile';
+import { updateUserAge, updateUserGender, updateUserLookingFor, updateUserPfp, updateUserUsername } from '../../firebase/updateUserProfile';
 import { useAuth } from './AuthContext';
 
 // Custom hook to manage user profile data and updates
@@ -42,6 +42,16 @@ export const useUserProfile = () => {
         return success;
     };
 
+    const updateProfilePicture = async (photoURL: string): Promise<boolean> => {
+        if (!user) return false;
+        const success = await updateUserPfp(user.uid, photoURL);
+        if (success) {
+            await refreshUserProfile();
+        }
+        return success;
+
+    }
+
     return {
         // Profile data
         userProfile,
@@ -58,6 +68,7 @@ export const useUserProfile = () => {
         updateGender,
         updateLookingFor,
         updateUsername,
+        updateUserPfp: updateProfilePicture,
         refreshProfile: refreshUserProfile,
     };
 };

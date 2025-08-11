@@ -10,7 +10,7 @@ import { getFirestore } from "firebase/firestore";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyDXOIquSPskMpY7r12X92PAmu3YSDFhrLI",
+    apiKey: "AIzaSyDIAavLPwP5aEDAMjIhFZmgrd17tsQRhFc",
     authDomain: "zoop-5bd80.firebaseapp.com",
     projectId: "zoop-5bd80",
     storageBucket: "zoop-5bd80.firebasestorage.app",
@@ -21,10 +21,25 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 
-// Get a reference to the Firestore service
+// Initialize Analytics (only in browser)
+let analytics;
+try {
+    if (typeof window !== 'undefined') {
+        analytics = getAnalytics(app);
+    }
+} catch (error) {
+    console.log('Analytics not available:', error);
+}
+
+// Get a reference to the Firestore service with explicit settings
 const db = getFirestore(app);
+
+// Initialize Auth
 const auth = getAuth(app);
+
+console.log('🔥 Firebase initialized successfully');
+console.log('📄 Firestore database region: us-central1 (default)');
+console.log('🔐 Auth domain:', firebaseConfig.authDomain);
 
 export { auth, db }; // Export the Auth and Firestore instances for use throughout your app

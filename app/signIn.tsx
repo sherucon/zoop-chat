@@ -2,7 +2,7 @@ import { Redirect } from "expo-router";
 import React, { useState } from "react";
 import { Dimensions, Image, Modal, StyleSheet, View, } from "react-native";
 import { useAuth } from "./components/AuthContext";
-// import DebugFirestore from "./components/DebugFirestore";
+// import FirestoreDiagnostic from "./components/FirestoreDiagnostic";
 import GoogleSignIn from "./components/GoogleSignIn";
 import PressableButton from "./components/PressableButton";
 import TermsAndConditions from "./components/TnC";
@@ -50,7 +50,7 @@ export default function SignIn() {
                     </View>
                 </Modal>
             </View>
-            {/* <DebugFirestore /> */}
+            {/* <FirestoreDiagnostic /> */}
         </View>
     )
 }

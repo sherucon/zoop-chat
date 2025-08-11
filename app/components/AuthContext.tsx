@@ -63,11 +63,15 @@ export const testFirestoreConnection = async () => {
 const createUserIfNotExists = async (user: User) => {
     console.log('🔄 Starting createUserIfNotExists for user:', user.email, 'UID:', user.uid);
     console.log('🔄 Database instance:', db ? 'Available' : 'Not available');
+    console.log('🔄 Project ID:', db.app.options.projectId);
+
     try {
         const userDocRef = doc(db, 'users', user.uid);
         console.log('📄 Document reference created, path:', `users/${user.uid}`);
         console.log('📄 Checking if user document exists...');
+
         const userDoc = await getDoc(userDocRef);
+        console.log('📄 getDoc completed successfully');
 
         if (!userDoc.exists()) {
             console.log('✨ User document does not exist, creating new document...');
@@ -86,17 +90,36 @@ const createUserIfNotExists = async (user: User) => {
 
             console.log('📊 About to save user data:', userData);
             await setDoc(userDocRef, userData);
-            console.log(' New user document created successfully for:', user.email);
+            console.log('✅ New user document created successfully for:', user.email);
         } else {
             console.log('ℹ️ User document already exists for:', user.email);
             console.log('📊 Existing data:', userDoc.data());
         }
     } catch (error) {
         console.error('❌ Error creating user document:', error);
+
         if (error instanceof Error) {
-            console.error('❌ Error details:', error.message);
+            console.error('❌ Error name:', error.name);
+            console.error('❌ Error message:', error.message);
             console.error('❌ Error stack:', error.stack);
+
+            // Check for specific Firestore errors
+            if (error.message.includes('permission-denied')) {
+                console.error('🚫 PERMISSION DENIED: Check your Firestore security rules!');
+                console.error('🔧 Suggested fix: Update Firestore rules to allow authenticated users to read/write');
+            }
+
+            if (error.message.includes('unavailable')) {
+                console.error('🌐 SERVICE UNAVAILABLE: Firestore service might be down or unreachable');
+            }
+
+            if (error.message.includes('not-found')) {
+                console.error('🔍 NOT FOUND: Database or collection might not exist');
+            }
         }
+
+        // Re-throw the error so calling code knows it failed
+        throw error;
     }
 };
 
@@ -187,7 +210,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     // Return cleanup function for profile listener
                     return unsubscribeProfile;
                 } catch (error) {
-                    console.error('Error in background user setup:', error);
+                    console.error('❌ Error in background user setup:', error);
+                    console.error('❌ User registration/profile loading failed, but auth still works');
                     setProfileLoading(false);
                 }
             } else {

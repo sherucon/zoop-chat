@@ -7,6 +7,8 @@ import PressableButton from '../components/PressableButton';
 import SmallSelector from '../components/SmallSelector';
 import { useUserProfile } from '../components/useUserProfile';
 
+import * as ImagePicker from 'expo-image-picker';
+
 
 const placeholderpfp = require('@/assets/images/default_pfp.png');
 
@@ -27,7 +29,8 @@ export default function profile() {
         updateAge,
         updateGender,
         updateLookingFor,
-        updateUsername
+        updateUsername,
+        updateUserPfp
     } = useUserProfile();
 
     console.log('User:', user);
@@ -38,18 +41,58 @@ export default function profile() {
     const [localUsername, setLocalUsername] = useState<string>(username || '');
     const abc = useRef<TextInput>(null);
 
+
+    const pickImageAsync = async () => {
+        // Request permissions first
+        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+        if (permissionResult.granted === false) {
+            alert('Permission to access camera roll is required!');
+            return;
+        }
+
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ['images'],
+            allowsEditing: true,
+            quality: 1,
+            aspect: [1, 1] // Square aspect ratio for profile pictures
+        });
+
+        if (!result.canceled) {
+            const selectedImageUri = result.assets[0].uri;
+            setPfp(selectedImageUri);
+
+            // Automatically update the profile picture in Firestore
+            if (updateUserPfp) {
+                try {
+                    console.log('🔄 Updating profile picture...');
+                    await updateUserPfp(selectedImageUri);
+                    console.log('✅ Profile picture updated successfully');
+                } catch (error) {
+                    console.error('❌ Failed to update profile picture:', error);
+                    alert('Failed to update profile picture. Please try again.');
+                }
+            }
+        } else {
+            console.log('User cancelled image selection');
+        }
+    }
+
     // Update local state when userProfile changes
     useEffect(() => {
         if (userProfile) {
             setLocalAge(age.toString());
             setLocalUsername(userProfile.username);
+            // Set profile picture from userProfile if available
+            if (userProfile.photoURL) {
+                setPfp(userProfile.photoURL);
+            }
         }
-    }, [age, username]);
-
+    }, [age, username, userProfile]);
     // Handle age update
     const handleAgeUpdate = async () => {
         const numAge = parseInt(localAge);
-        if (!isNaN(numAge) && numAge > 0) {
+        if (!isNaN(numAge) && numAge > 0 && numAge < 100) {
             await updateAge(numAge);
         }
     };
@@ -66,7 +109,6 @@ export default function profile() {
         return (
             <View style={[styles.Container, { justifyContent: 'center' }]}>
                 <ActivityIndicator size="large" color="#C0C0C0" />
-                <Text style={styles.Text}>Loading profile...</Text>
             </View>
         );
     }
@@ -74,7 +116,36 @@ export default function profile() {
     return (
         <View style={styles.Container}>
             <Spacer size={40} />
-            <Image source={user?.photoURL ? { uri: user.photoURL } : placeholderpfp} style={{ height: 170, aspectRatio: 1, borderRadius: 85 }} />
+            <Pressable onPress={pickImageAsync}>
+                <Image
+                    source={
+                        pfp ? { uri: pfp } :
+                            (userProfile?.photoURL ? { uri: userProfile.photoURL } :
+                                (user?.photoURL ? { uri: user.photoURL } : placeholderpfp))
+                    }
+                    style={{
+                        height: 170,
+                        aspectRatio: 1,
+                        borderRadius: 85,
+                        borderWidth: 3,
+                        borderColor: '#4A9EFF'
+                    }}
+                />
+                {/* Add a visual indicator that the image is clickable */}
+                <View style={{
+                    position: 'absolute',
+                    bottom: 5,
+                    right: 5,
+                    backgroundColor: '#4A9EFF',
+                    borderRadius: 15,
+                    width: 30,
+                    height: 30,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                    <Ionicons name="camera" size={16} color="white" />
+                </View>
+            </Pressable>
             <Spacer size={10} />
             <Pressable style={{ padding: 5, flexDirection: 'row', gap: 4, alignItems: 'center' }} onPress={() => { abc.current?.focus(); }}>
                 <TextInput
@@ -87,8 +158,8 @@ export default function profile() {
                     placeholder="Enter username"
                     placeholderTextColor="#808080"
                     autoCapitalize="none"
+
                 />
-                <Ionicons name="pencil" size={16} color="#C0C0C0" />
             </Pressable>
             <Spacer size={20} />
             <View style={styles.InputArea}>
@@ -179,7 +250,9 @@ const styles = StyleSheet.create({
     Text: {
         color: "#C0C0C0",
         fontSize: 20,
-        padding: 0
+        padding: 0,
+        textDecorationLine: 'underline',
+        textDecorationColor: '#5B5B5B'
     },
     InputArea: {
         flex: 1 / 2,
@@ -190,11 +263,10 @@ const styles = StyleSheet.create({
         flex: 1 / 3,
         flexDirection: 'row',
         backgroundColor: '#3E3E3E',
-        padding: 15,
+        paddingHorizontal: 15,
         borderRadius: 15,
         marginTop: 10,
         alignItems: 'center',
         justifyContent: 'space-between'
-
     }
 })

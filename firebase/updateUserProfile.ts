@@ -41,3 +41,7 @@ export const updateUserLookingFor = async (userId: string, lookingFor: string) =
 export const updateUserUsername = async (userId: string, username: string) => {
     return updateUserProfile(userId, { username });
 };
+
+export const updateUserPfp = async (userId: string, photoURL: string) => {
+    return updateUserProfile(userId, { photoURL });
+}
