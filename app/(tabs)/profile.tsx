@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Image, Platform, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useAuth } from '../components/AuthContext';
@@ -54,7 +54,7 @@ export default function profile() {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ['images'],
             allowsEditing: true,
-            quality: 1,
+            quality: 0.5,
             aspect: [1, 1] // Square aspect ratio for profile pictures
         });
 
@@ -104,6 +104,43 @@ export default function profile() {
         }
     };
 
+
+    const uploadImage = async () => {
+        if (!pfp) return alert('Please select an image first!');
+
+        const formData = new FormData();
+        const filename = user?.uid;
+        const match = filename ? /\.(\w+)$/.exec(filename) : null;
+        const type = match ? `image/${match[1]}` : `image`;
+
+        formData.append('uuid', user?.uid || '');
+        formData.append('pfp', {
+            uri: Platform.OS === 'ios' ? pfp.replace('file://', '') : pfp,
+            name: filename,
+            type,
+        } as any);
+
+        try {
+            const response = await fetch('http://sherucon.tech/uploadPfp', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            });
+            const data = await response.json();
+            if (data.success) {
+                alert('Upload successful!');
+                console.log('Uploaded image URL:', data.url);
+            } else {
+                alert('Upload failed: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error) {
+            console.error('Upload error:', error);
+            alert('Upload error. Check console for details.');
+        }
+    };
+
     // Show loading indicator while profile is loading
     if (profileLoading) {
         return (
@@ -112,131 +149,132 @@ export default function profile() {
             </View>
         );
     }
-
-    return (
-        <View style={styles.Container}>
-            <Spacer size={40} />
-            <Pressable onPress={pickImageAsync}>
-                <Image
-                    source={
-                        pfp ? { uri: pfp } :
-                            (userProfile?.photoURL ? { uri: userProfile.photoURL } :
-                                (user?.photoURL ? { uri: user.photoURL } : placeholderpfp))
-                    }
-                    style={{
-                        height: 170,
-                        aspectRatio: 1,
-                        borderRadius: 85,
-                        borderWidth: 3,
-                        borderColor: '#4A9EFF'
-                    }}
-                />
-                {/* Add a visual indicator that the image is clickable */}
-                <View style={{
-                    position: 'absolute',
-                    bottom: 5,
-                    right: 5,
-                    backgroundColor: '#4A9EFF',
-                    borderRadius: 15,
-                    width: 30,
-                    height: 30,
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                    <Ionicons name="camera" size={16} color="white" />
-                </View>
-            </Pressable>
-            <Spacer size={10} />
-            <Pressable style={{ padding: 5, flexDirection: 'row', gap: 4, alignItems: 'center' }} onPress={() => { abc.current?.focus(); }}>
-                <TextInput
-                    ref={abc}
-                    style={styles.Text}
-                    editable={true}
-                    value={localUsername}
-                    onChangeText={setLocalUsername}
-                    onEndEditing={handleUsernameUpdate}
-                    placeholder="Enter username"
-                    placeholderTextColor="#808080"
-                    autoCapitalize="none"
-
-                />
-            </Pressable>
-            <Spacer size={20} />
-            <View style={styles.InputArea}>
-                <View style={styles.InputField}>
-                    <Text style={{ fontSize: 16, color: '#C0C0C0' }}>Age</Text>
-                    <TextInput
-                        editable={true}
-                        value={localAge}
-                        onChangeText={setLocalAge}
-                        onEndEditing={handleAgeUpdate}
-                        placeholder="Enter age"
-                        placeholderTextColor="#808080"
-                        keyboardType="numeric"
-                        style={{ color: '#C0C0C0', fontSize: 16, minWidth: 60, textAlign: 'right', padding: 0 }}
-                    />
-                </View>
-                <View style={styles.InputField}>
-                    <Text style={{ fontSize: 16, color: '#C0C0C0' }}>I am</Text>
-                    <View style={{ flexDirection: 'row', gap: 10 }}>
-                        <SmallSelector
-                            onPress={() => updateGender('male')}
-                            icon={<Ionicons
-                                name="male"
-                                size={25}
-                                color={gender === 'male' ? '#4A9EFF' : '#C0C0C0'}
-                            />}
-                        />
-                        <SmallSelector
-                            onPress={() => updateGender('female')}
-                            icon={<Ionicons
-                                name="female"
-                                size={25}
-                                color={gender === 'female' ? '#4A9EFF' : '#C0C0C0'}
-                            />}
-                        />
-                    </View>
-                </View>
-                <View style={styles.InputField}>
-                    <Text style={{ fontSize: 16, color: '#C0C0C0' }}>Looking for</Text>
-                    <View style={{ flexDirection: 'row', gap: 10 }}>
-                        <SmallSelector
-                            onPress={() => updateLookingFor('male')}
-                            icon={<Ionicons
-                                name="male"
-                                size={25}
-                                color={lookingFor === 'male' ? '#4A9EFF' : '#C0C0C0'}
-                            />}
-                        />
-                        <SmallSelector
-                            onPress={() => updateLookingFor('female')}
-                            icon={<Ionicons
-                                name="female"
-                                size={25}
-                                color={lookingFor === 'female' ? '#4A9EFF' : '#C0C0C0'}
-                            />}
-                        />
-                        <SmallSelector
-                            onPress={() => updateLookingFor('both')}
-                            icon={<Ionicons
-                                name="male-female"
-                                size={25}
-                                color={lookingFor === 'both' ? '#4A9EFF' : '#C0C0C0'}
-                            />}
-                        />
-                    </View>
-                </View>
-
-                {/* Display current values for debugging */}
-
-
-            </View>
-            <View style={{ flex: 1 / 2 }}>
+    else {
+        return (
+            <View style={styles.Container}>
                 <Spacer size={40} />
-                <PressableButton label="Sign out" onPress={signOut} style={{ width: '90%', alignSelf: 'center', borderRadius: 15 }}></PressableButton>
+                <Pressable onPress={async () => { await pickImageAsync(); await uploadImage(); }}>
+                    <Image
+                        source={
+                            pfp ? { uri: pfp } :
+                                (userProfile?.photoURL ? { uri: userProfile.photoURL } :
+                                    (user?.photoURL ? { uri: user.photoURL } : placeholderpfp))
+                        }
+                        style={{
+                            height: 170,
+                            aspectRatio: 1,
+                            borderRadius: 85,
+                            borderWidth: 3,
+                            borderColor: '#C0C0C0'
+                        }}
+                    />
+                    {/* Add a visual indicator that the image is clickable */}
+                    <View style={{
+                        position: 'absolute',
+                        bottom: 5,
+                        right: 5,
+                        backgroundColor: '#C0C0C0',
+                        borderRadius: 15,
+                        width: 30,
+                        height: 30,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Ionicons name="camera" size={16} color="2E2E2E" />
+                    </View>
+                </Pressable>
+                <Spacer size={10} />
+                <Pressable style={{ padding: 5, flexDirection: 'row', gap: 4, alignItems: 'center' }} onPress={() => { abc.current?.focus(); }}>
+                    <TextInput
+                        ref={abc}
+                        style={styles.Text}
+                        editable={true}
+                        value={localUsername}
+                        onChangeText={setLocalUsername}
+                        onEndEditing={handleUsernameUpdate}
+                        placeholder="Enter username"
+                        placeholderTextColor="#808080"
+                        autoCapitalize="none"
+
+                    />
+                </Pressable>
+                <Spacer size={20} />
+                <View style={styles.InputArea}>
+                    <View style={styles.InputField}>
+                        <Text style={{ fontSize: 16, color: '#C0C0C0' }}>Age</Text>
+                        <TextInput
+                            editable={true}
+                            value={localAge}
+                            onChangeText={setLocalAge}
+                            onEndEditing={handleAgeUpdate}
+                            placeholder="Enter age"
+                            placeholderTextColor="#808080"
+                            keyboardType="numeric"
+                            style={{ color: '#C0C0C0', fontSize: 16, minWidth: 60, textAlign: 'right', padding: 0 }}
+                        />
+                    </View>
+                    <View style={styles.InputField}>
+                        <Text style={{ fontSize: 16, color: '#C0C0C0' }}>I am</Text>
+                        <View style={{ flexDirection: 'row', gap: 10 }}>
+                            <SmallSelector
+                                onPress={() => updateGender('male')}
+                                icon={<Ionicons
+                                    name="male"
+                                    size={25}
+                                    color={gender === 'male' ? '#4A9EFF' : '#C0C0C0'}
+                                />}
+                            />
+                            <SmallSelector
+                                onPress={() => updateGender('female')}
+                                icon={<Ionicons
+                                    name="female"
+                                    size={25}
+                                    color={gender === 'female' ? '#4A9EFF' : '#C0C0C0'}
+                                />}
+                            />
+                        </View>
+                    </View>
+                    <View style={styles.InputField}>
+                        <Text style={{ fontSize: 16, color: '#C0C0C0' }}>Looking for</Text>
+                        <View style={{ flexDirection: 'row', gap: 10 }}>
+                            <SmallSelector
+                                onPress={() => updateLookingFor('male')}
+                                icon={<Ionicons
+                                    name="male"
+                                    size={25}
+                                    color={lookingFor === 'male' ? '#4A9EFF' : '#C0C0C0'}
+                                />}
+                            />
+                            <SmallSelector
+                                onPress={() => updateLookingFor('female')}
+                                icon={<Ionicons
+                                    name="female"
+                                    size={25}
+                                    color={lookingFor === 'female' ? '#4A9EFF' : '#C0C0C0'}
+                                />}
+                            />
+                            <SmallSelector
+                                onPress={() => updateLookingFor('both')}
+                                icon={<Ionicons
+                                    name="male-female"
+                                    size={25}
+                                    color={lookingFor === 'both' ? '#4A9EFF' : '#C0C0C0'}
+                                />}
+                            />
+                        </View>
+                    </View>
+
+                    {/* Display current values for debugging */}
+
+
+                </View>
+                <View style={{ flex: 1 / 2 }}>
+                    <Spacer size={40} />
+                    <PressableButton label="Sign out" onPress={signOut} style={{ width: '90%', alignSelf: 'center', borderRadius: 15 }}></PressableButton>
+                </View>
             </View>
-        </View>
-    )
+        )
+    }
 }
 
 
