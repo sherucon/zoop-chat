@@ -1,9 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
+import { Pressable, Text } from 'react-native';
+import { useAuth } from '../components/AuthContext';
 import ProtectedRoute from '../components/ProtectedRoute';
+
+
 
 export default function TabsLayout() {
     console.log('Tabs layout rendering');
+
+    const { signOut } = useAuth();
 
     return (
         <ProtectedRoute>
@@ -31,6 +37,9 @@ export default function TabsLayout() {
                         title: 'Profile',
                         tabBarIcon: ({ color, focused }) => (
                             <Ionicons name={focused ? 'person-circle' : 'person-circle-outline'} size={24} color={color} />
+                        ),
+                        headerRight: () => (
+                            <Pressable onPress={signOut} style={{ padding: 10 }}><Text style={{ color: "red" }}>Sign out</Text></Pressable>
                         ),
                     }}
                 />
