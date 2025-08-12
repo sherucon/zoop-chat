@@ -4,8 +4,6 @@ import { Pressable, Text } from 'react-native';
 import { useAuth } from '../components/AuthContext';
 import ProtectedRoute from '../components/ProtectedRoute';
 
-
-
 export default function TabsLayout() {
     console.log('Tabs layout rendering');
 

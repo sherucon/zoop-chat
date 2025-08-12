@@ -1,7 +1,7 @@
 import { Redirect } from 'expo-router';
-import React from 'react';
 import { ActivityIndicator, View } from 'react-native';
 import { useAuth } from './AuthContext';
+import React = require('react');
 
 interface ProtectedRouteProps {
     children: React.ReactNode;

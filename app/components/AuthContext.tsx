@@ -1,7 +1,8 @@
 import { User, signOut as firebaseSignOut, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { auth, db } from '../../firebase/firebaseConfig';
+import React = require('react');
 
 // Define the user profile data structure
 export interface UserProfile {
