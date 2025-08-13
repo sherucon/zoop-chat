@@ -1,4 +1,5 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Image } from 'expo-image';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useRef, useState } from 'react';
@@ -146,7 +147,7 @@ export default function profile() {
                     justifyContent: 'center',
                     alignItems: 'center'
                 }}>
-                    <Ionicons name="camera" size={16} color="#2E2E2E" />
+                    <MaterialCommunityIcons name="account-edit" size={16} color="#2E2E2E" />
                 </View>
             </Pressable>
             <Spacer size={10} />
@@ -163,6 +164,8 @@ export default function profile() {
                     autoCapitalize="none"
                 />
             </Pressable>
+            <Text style={{ fontSize: 10, color: '#C0C0C0' }}>{user?.email}</Text>
+
             <Spacer size={20} />
             <View style={styles.InputArea}>
                 <View style={styles.InputField}>
